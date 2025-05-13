@@ -38,6 +38,16 @@ if ($path === 'register-handler') {
     exit;
 }
 
+if ($path === 'add-review') {
+    require_once __DIR__ . '/actions/add-review.php';
+    exit;
+}
+
+if ($path === 'toggle-like') {
+    require_once __DIR__ . '/actions/toggle-like.php';
+    exit;
+}
+
 $page = $path ?: 'home';
 $file = __DIR__ . '/pages/' . $page . '.php';
 

@@ -88,7 +88,7 @@
                             <span class="amount">$<?= $car['price'] ?></span>
                             <span class="period">/day</span>
                         </div>
-                        <a href="#" class="rent-now-btn">Rent Now</a>
+                        <a href="/car-detail?id=<?= $i + 1 ?>" class="rent-now-btn">Rent Now</a>
                     </div>
                 </div>
             <?php endfor; ?>
@@ -187,7 +187,7 @@
                             <span class="amount">$<?= $car['price'] ?></span>
                             <span class="period">/day</span>
                         </div>
-                        <a href="#" class="rent-now-btn">Rent Now</a>
+                        <a href="/car-detail?id=<?= $i + 1 ?>" class="rent-now-btn">Rent Now</a>
                     </div>
                 </div>
             <?php endfor; ?>
