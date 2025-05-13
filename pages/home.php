@@ -62,9 +62,7 @@
                             <h3><?= $car['brand'] ?></h3>
                             <span class="car-type"><?= $car['type'] ?></span>
                         </div>
-                        <div class="favorite-icon <?= $car['favorite'] ? 'active' : '' ?>">
-                            <i class="fa <?= $car['favorite'] ? 'fa-heart' : 'fa-heart-o' ?>"></i>
-                        </div>
+                        <!-- Favorite icon removed as requested -->
                     </div>
                     <div class="car-image">
                         <img src="assets/images/products/<?= $imgPath ?>" alt="<?= $car['brand'] ?>">
@@ -161,9 +159,7 @@
                             <h3><?= $car['brand'] ?></h3>
                             <span class="car-type"><?= $car['type'] ?></span>
                         </div>
-                        <div class="favorite-icon <?= $car['favorite'] ? 'active' : '' ?>">
-                            <i class="fa <?= $car['favorite'] ? 'fa-heart' : 'fa-heart-o' ?>"></i>
-                        </div>
+                        <!-- Favorite icon removed as requested -->
                     </div>
                     <div class="car-image">
                         <img src="assets/images/products/<?= $imgPath ?>" alt="<?= $car['brand'] ?>">

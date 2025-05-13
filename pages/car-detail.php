@@ -89,9 +89,7 @@ if (isset($_GET['error'])) {
                             <span class="review-count"><?= count($reviews) ?> Reviews</span>
                         </div>
                     </div>
-                    <div class="favorite-button <?= (isset($car['is_favorite']) && $car['is_favorite']) ? 'active' : '' ?>" id="favorite-btn" data-car-id="<?= $car['id'] ?>">
-                        <i class="fa <?= (isset($car['is_favorite']) && $car['is_favorite']) ? 'fa-heart' : 'fa-heart-o' ?>"></i>
-                    </div>
+                    <!-- Like button removed as requested -->
                 </div>
                 
                 <div class="car-description">
@@ -203,46 +201,6 @@ if (isset($_GET['error'])) {
     </div>
 </main>
 
-<!-- Add JavaScript for like functionality -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Get the favorite button
-    const favoriteBtn = document.getElementById('favorite-btn');
-    
-    if (favoriteBtn) {
-        favoriteBtn.addEventListener('click', function() {
-            const carId = this.getAttribute('data-car-id');
-            
-            // Create form data
-            const formData = new FormData();
-            formData.append('car_id', carId);
-            
-            // Send AJAX request
-            fetch('/toggle-like', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Toggle active class and icon
-                    if (data.is_liked) {
-                        favoriteBtn.classList.add('active');
-                        favoriteBtn.querySelector('i').className = 'fa fa-heart';
-                    } else {
-                        favoriteBtn.classList.remove('active');
-                        favoriteBtn.querySelector('i').className = 'fa fa-heart-o';
-                    }
-                } else {
-                    console.error('Error:', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    }
-});
-</script>
+<!-- JavaScript for like functionality removed as requested -->
 
 <?php require "includes/footer.php" ?>
