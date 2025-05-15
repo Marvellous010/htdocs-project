@@ -21,7 +21,7 @@ try {
     
     $car = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    // If no cars in database, redirect to setup page
+    // If no cars in database, show error message
     if (!$car) {
         echo "<div class='message'>No cars found in database. Please <a href='/setup_database.php'>setup the database</a> first.</div>";
         exit;
@@ -31,11 +31,16 @@ try {
     $stmt = $conn->prepare("SELECT * FROM reviews WHERE car_id = :car_id ORDER BY date DESC");
     $stmt->bindParam(':car_id', $car['id']);
     $stmt->execute();
-    $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $carReviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
 } catch (PDOException $e) {
     echo "<div class='message'>Database error: " . $e->getMessage() . "</div>";
     exit;
+}
+
+// No sample reviews - keep the array empty
+if (empty($carReviews)) {
+    $carReviews = [];
 }
 ?>
 
@@ -55,8 +60,8 @@ if (isset($_GET['error'])) {
         <div class="car-detail-left">
             <div class="car-detail-card">
                 <div class="car-detail-hero">
-                    <h2>Sports car with the best design and acceleration</h2>
-                    <p>Safety and comfort while driving a futuristic and elegant sports car</p>
+                    <h2><?= $car['brand'] ?> - <?= $car['type'] ?></h2>
+                    <p><?= $car['description'] ?></p>
                     <div class="car-hero-image">
                         <?php if(isset($car['main_image'])): ?>
                             <img src="assets/images/products/<?= $car['main_image'] ?>" alt="<?= $car['brand'] ?>">
@@ -85,8 +90,8 @@ if (isset($_GET['error'])) {
                     <div class="car-title-rating">
                         <h1><?= $car['brand'] ?> <?= isset($car['type']) ? '- ' . $car['type'] : '' ?></h1>
                         <div class="car-rating">
-                            <div class="stars stars-<?= count($reviews) > 0 ? min(5, round(array_sum(array_column($reviews, 'rating')) / count($reviews))) : 0 ?>"></div>
-                            <span class="review-count"><?= count($reviews) ?> Reviews</span>
+                            <div class="stars stars-<?= count($carReviews) > 0 ? min(5, round(array_sum(array_column($carReviews, 'rating')) / count($carReviews))) : 0 ?>"></div>
+                            <span class="review-count"><?= count($carReviews) ?> Reviews</span>
                         </div>
                     </div>
                     <!-- Like button removed as requested -->
@@ -117,8 +122,8 @@ if (isset($_GET['error'])) {
                 
                 <div class="car-pricing">
                     <div class="price-info">
-                        <div class="current-price">$<?= isset($car['price']) ? $car['price'] : '0.00' ?><span class="price-period">/day</span></div>
-                        <div class="old-price">$<?= isset($car['old_price']) ? $car['old_price'] : '0.00' ?></div>
+                        <div class="current-price">€<?= isset($car['price']) ? $car['price'] : '0,00' ?><span class="price-period">/dag</span></div>
+                        <div class="old-price">€<?= isset($car['old_price']) ? $car['old_price'] : '0,00' ?></div>
                     </div>
                     <a href="#" class="rent-now-button">Rent Now</a>
                 </div>
@@ -129,12 +134,12 @@ if (isset($_GET['error'])) {
     <div class="reviews-section">
         <div class="reviews-header">
             <h2>Reviews</h2>
-            <span class="review-count"><?= count($reviews) ?></span>
+            <span class="review-count"><?= count($carReviews) ?></span>
         </div>
         
         <div class="reviews-list">
-            <?php if(count($reviews) > 0): ?>
-                <?php foreach($reviews as $review): ?>
+            <?php if(count($carReviews) > 0): ?>
+                <?php foreach($carReviews as $review): ?>
                 <div class="review-item">
                     <div class="reviewer-info">
                         <div class="reviewer-avatar">
@@ -159,7 +164,7 @@ if (isset($_GET['error'])) {
             <?php endif; ?>
         </div>
         
-        <?php if(count($reviews) > 3): ?>
+        <?php if(count($carReviews) > 3): ?>
         <div class="show-all-reviews">
             <button class="show-all-button">Show All <i class="fa fa-chevron-down"></i></button>
         </div>

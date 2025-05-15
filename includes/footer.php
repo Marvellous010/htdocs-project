@@ -58,6 +58,7 @@
     </div>
 </div>
 <script src="assets/javascript/main.js"></script>
+<script src="assets/js/like-car.js"></script>
 
 </body>
 </html>

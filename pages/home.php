@@ -20,41 +20,25 @@
 
     <main>
         <div class="section-header">
-            <h2 class="section-title">Popular Car</h2>
+            <h2 class="section-title">Popular Cars</h2>
             <a href="/ons-aanbod" class="view-all">View All</a>
         </div>
         <div class="car-grid">
             <?php 
-            $popularCars = [
-                [
-                    'brand' => 'Koenigsegg',
-                    'type' => 'Sport',
-                    'price' => '99.00',
-                    'favorite' => true
-                ],
-                [
-                    'brand' => 'Nissan GT - R',
-                    'type' => 'Sport',
-                    'price' => '80.00',
-                    'favorite' => false
-                ],
-                [
-                    'brand' => 'Rolls - Royce',
-                    'type' => 'Sport',
-                    'price' => '96.00',
-                    'favorite' => true
-                ],
-                [
-                    'brand' => 'Nissan GT - R',
-                    'type' => 'Sport',
-                    'price' => '80.00',
-                    'favorite' => false
-                ]
-            ];
+            // Include database connection
+            require_once __DIR__ . "/../database/connection.php";
             
-            for ($i = 0; $i < count($popularCars); $i++) : 
-                $car = $popularCars[$i];
-                $imgPath = ($i <= 1) ? "car ({$i}).svg" : "Car ({$i}).svg";
+            try {
+                // Fetch popular cars from database (limit to 4 for the homepage)
+                $stmt = $conn->query("SELECT * FROM cars LIMIT 4");
+                $popularCars = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $e) {
+                echo "<div class='message'>Database error: " . $e->getMessage() . "</div>";
+                $popularCars = [];
+            }
+            
+            // Display cars
+            foreach ($popularCars as $i => $car) :
             ?>
                 <div class="car-card">
                     <div class="car-header">
@@ -62,132 +46,39 @@
                             <h3><?= $car['brand'] ?></h3>
                             <span class="car-type"><?= $car['type'] ?></span>
                         </div>
-                        <!-- Favorite icon removed as requested -->
+                        <div class="favorite-icon <?= $car['is_favorite'] ? 'active' : '' ?>" data-car-id="<?= $car['id'] ?>">
+                            <i class="fa fa-heart"></i>
+                        </div>
                     </div>
                     <div class="car-image">
-                        <img src="assets/images/products/<?= $imgPath ?>" alt="<?= $car['brand'] ?>">
+                        <img src="assets/images/products/<?= $car['main_image'] ?>" alt="<?= $car['brand'] ?>">
                     </div>
                     <div class="car-specs">
                         <div class="spec-item">
                             <img src="assets/images/icons/gas-station.svg" alt="Fuel">
-                            <span>70L</span>
+                            <span><?= $car['gasoline'] ?></span>
                         </div>
                         <div class="spec-item">
                             <img src="assets/images/icons/car.svg" alt="Manual">
-                            <span>Manual</span>
+                            <span><?= $car['steering'] ?></span>
                         </div>
                         <div class="spec-item">
                             <img src="assets/images/icons/profile-2user.svg" alt="People">
-                            <span>2 People</span>
+                            <span><?= $car['capacity'] ?></span>
                         </div>
                     </div>
                     <div class="car-footer">
                         <div class="price">
-                            <span class="amount">$<?= $car['price'] ?></span>
+                            <span class="amount">€<?= number_format((float)$car['price'], 2, ',', '.') ?></span>
                             <span class="period">/day</span>
                         </div>
-                        <a href="/car-detail?id=<?= $i + 1 ?>" class="rent-now-btn">Rent Now</a>
+                        <a href="/car-detail?id=<?= $car['id'] ?>" class="rent-now-btn">Rent Now</a>
                     </div>
                 </div>
-            <?php endfor; ?>
+            <?php endforeach; ?>
         </div>
 
-        <div class="section-header">
-            <h2 class="section-title">Recommended Car</h2>
-        </div>
-        <div class="car-grid">
-            <?php 
-            $recommendedCars = [
-                [
-                    'brand' => 'All New Rush',
-                    'type' => 'SUV',
-                    'price' => '72.00',
-                    'favorite' => false
-                ],
-                [
-                    'brand' => 'CR - V',
-                    'type' => 'SUV',
-                    'price' => '80.00',
-                    'favorite' => true
-                ],
-                [
-                    'brand' => 'All New Terios',
-                    'type' => 'SUV',
-                    'price' => '74.00',
-                    'favorite' => false
-                ],
-                [
-                    'brand' => 'CR - V',
-                    'type' => 'SUV',
-                    'price' => '80.00',
-                    'favorite' => true
-                ],
-                [
-                    'brand' => 'MG ZX Exclusive',
-                    'type' => 'SUV',
-                    'price' => '76.00',
-                    'favorite' => true
-                ],
-                [
-                    'brand' => 'New MG ZS',
-                    'type' => 'SUV',
-                    'price' => '80.00',
-                    'favorite' => false
-                ],
-                [
-                    'brand' => 'MG ZX Excite',
-                    'type' => 'SUV',
-                    'price' => '74.00',
-                    'favorite' => true
-                ],
-                [
-                    'brand' => 'New MG ZS',
-                    'type' => 'SUV',
-                    'price' => '80.00',
-                    'favorite' => false
-                ]
-            ];
-            
-            for ($i = 0; $i < count($recommendedCars); $i++) : 
-                $car = $recommendedCars[$i];
-                $imgIndex = $i + 4;
-                $imgPath = "Car ({$imgIndex}).svg";
-            ?>
-                <div class="car-card">
-                    <div class="car-header">
-                        <div class="car-info">
-                            <h3><?= $car['brand'] ?></h3>
-                            <span class="car-type"><?= $car['type'] ?></span>
-                        </div>
-                        <!-- Favorite icon removed as requested -->
-                    </div>
-                    <div class="car-image">
-                        <img src="assets/images/products/<?= $imgPath ?>" alt="<?= $car['brand'] ?>">
-                    </div>
-                    <div class="car-specs">
-                        <div class="spec-item">
-                            <img src="assets/images/icons/gas-station.svg" alt="Fuel">
-                            <span>70L</span>
-                        </div>
-                        <div class="spec-item">
-                            <img src="assets/images/icons/car.svg" alt="Manual">
-                            <span>Manual</span>
-                        </div>
-                        <div class="spec-item">
-                            <img src="assets/images/icons/profile-2user.svg" alt="People">
-                            <span>2 People</span>
-                        </div>
-                    </div>
-                    <div class="car-footer">
-                        <div class="price">
-                            <span class="amount">$<?= $car['price'] ?></span>
-                            <span class="period">/day</span>
-                        </div>
-                        <a href="/car-detail?id=<?= $i + 1 ?>" class="rent-now-btn">Rent Now</a>
-                    </div>
-                </div>
-            <?php endfor; ?>
-        </div>
+
         
         <div class="show-more-cars">
             <a class="button-primary" href="/ons-aanbod">Show more cars</a>
