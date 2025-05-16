@@ -47,7 +47,7 @@ if (empty($carReviews)) {
 <?php
 // Display success or error messages if they exist
 if (isset($_GET['success']) && $_GET['success'] == 1) {
-    echo '<div class="succes-message">Your review has been submitted successfully!</div>';
+    echo '<div class="succes-message">Uw beoordeling is succesvol ingediend!</div>';
 }
 
 if (isset($_GET['error'])) {
@@ -91,7 +91,7 @@ if (isset($_GET['error'])) {
                         <h1><?= $car['brand'] ?> <?= isset($car['type']) ? '- ' . $car['type'] : '' ?></h1>
                         <div class="car-rating">
                             <div class="stars stars-<?= count($carReviews) > 0 ? min(5, round(array_sum(array_column($carReviews, 'rating')) / count($carReviews))) : 0 ?>"></div>
-                            <span class="review-count"><?= count($carReviews) ?> Reviews</span>
+                            <span class="review-count"><?= count($carReviews) ?> Beoordelingen</span>
                         </div>
                     </div>
                     <!-- Like button removed as requested -->
@@ -103,19 +103,19 @@ if (isset($_GET['error'])) {
                 
                 <div class="car-specs-grid">
                     <div class="car-spec">
-                        <span class="spec-label">Type Car</span>
+                        <span class="spec-label">Type Auto</span>
                         <span class="spec-value"><?= isset($car['type']) ? $car['type'] : 'N/A' ?></span>
                     </div>
                     <div class="car-spec">
-                        <span class="spec-label">Capacity</span>
+                        <span class="spec-label">Capaciteit</span>
                         <span class="spec-value"><?= isset($car['capacity']) ? $car['capacity'] : 'N/A' ?></span>
                     </div>
                     <div class="car-spec">
-                        <span class="spec-label">Steering</span>
+                        <span class="spec-label">Besturing</span>
                         <span class="spec-value"><?= isset($car['steering']) ? $car['steering'] : 'N/A' ?></span>
                     </div>
                     <div class="car-spec">
-                        <span class="spec-label">Gasoline</span>
+                        <span class="spec-label">Brandstof</span>
                         <span class="spec-value"><?= isset($car['gasoline']) ? $car['gasoline'] : 'N/A' ?></span>
                     </div>
                 </div>
@@ -125,7 +125,7 @@ if (isset($_GET['error'])) {
                         <div class="current-price">€<?= isset($car['price']) ? $car['price'] : '0,00' ?><span class="price-period">/dag</span></div>
                         <div class="old-price">€<?= isset($car['old_price']) ? $car['old_price'] : '0,00' ?></div>
                     </div>
-                    <a href="#" class="rent-now-button">Rent Now</a>
+                    <a href="#" class="rent-now-button">Huur Nu</a>
                 </div>
             </div>
         </div>
@@ -133,7 +133,7 @@ if (isset($_GET['error'])) {
     
     <div class="reviews-section">
         <div class="reviews-header">
-            <h2>Reviews</h2>
+            <h2>Beoordelingen</h2>
             <span class="review-count"><?= count($carReviews) ?></span>
         </div>
         
@@ -160,33 +160,33 @@ if (isset($_GET['error'])) {
                 </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <div class="no-reviews">No reviews yet. Be the first to review this car!</div>
+                <div class="no-reviews">Nog geen beoordelingen. Wees de eerste om deze auto te beoordelen!</div>
             <?php endif; ?>
         </div>
         
         <?php if(count($carReviews) > 3): ?>
         <div class="show-all-reviews">
-            <button class="show-all-button">Show All <i class="fa fa-chevron-down"></i></button>
+            <button class="show-all-button">Toon Alles <i class="fa fa-chevron-down"></i></button>
         </div>
         <?php endif; ?>
         
         <div class="add-review-section">
-            <h3>Add Your Review</h3>
+            <h3>Voeg Uw Beoordeling Toe</h3>
             <form action="/add-review" method="post" class="review-form">
                 <input type="hidden" name="car_id" value="<?= $car['id'] ?>">
                 
                 <div class="form-group">
-                    <label for="name">Your Name</label>
+                    <label for="name">Uw Naam</label>
                     <input type="text" id="name" name="name" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="position">Your Position</label>
-                    <input type="text" id="position" name="position" placeholder="e.g. CEO at Company" required>
+                    <label for="position">Uw Functie</label>
+                    <input type="text" id="position" name="position" placeholder="bijv. CEO bij Bedrijf" required>
                 </div>
                 
                 <div class="form-group">
-                    <label>Rating</label>
+                    <label>Beoordeling</label>
                     <div class="rating-input">
                         <?php for($i = 1; $i <= 5; $i++): ?>
                         <input type="radio" id="star<?= $i ?>" name="rating" value="<?= $i ?>" <?= $i === 5 ? 'checked' : '' ?>>
@@ -196,7 +196,7 @@ if (isset($_GET['error'])) {
                 </div>
                 
                 <div class="form-group">
-                    <label for="comment">Your Review</label>
+                    <label for="comment">Uw Beoordeling</label>
                     <textarea id="comment" name="comment" rows="4" required></textarea>
                 </div>
                 

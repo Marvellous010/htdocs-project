@@ -19,7 +19,7 @@
                 <li><a href="#">Events</a></li>
                 <li><a href="#">Blog</a></li>
                 <li><a href="#">Podcast</a></li>
-                <li><a href="#">Invite a friend</a></li>
+                <li><a href="#">Nodig een vriend uit</a></li>
             </ul>
         </div>
         <div class="links">
@@ -36,13 +36,13 @@
 <div class="legal-footer">
     <div class="legal">
         <div class="copyright">
-            © <?= date("Y") ?> Rydr. All rights reserved
+            <?= date("Y") ?> Rydr. Alle rechten voorbehouden
         </div>
     </div>
     <div class="legal-links">
         <ul>
-            <li><a href="#">Privacy & Policy</a></li>
-            <li><a href="#">Terms & Condition</a></li>
+            <li><a href="#">Privacy & Beleid</a></li>
+            <li><a href="#">Algemene Voorwaarden</a></li>
         </ul>
     </div>
 </div>

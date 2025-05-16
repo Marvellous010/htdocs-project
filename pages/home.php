@@ -4,15 +4,15 @@
             <div class="advertorial">
                 <h2>Hét platform om een auto te huren</h2>
                 <p>Snel en eenvoudig een auto huren. Natuurlijk voor een lage prijs.</p>
-                <a href="#" class="button-primary">Huur nu een auto</a>
+                <a href="<?php echo isset($_SESSION['id']) ? '/ons-aanbod' : '/register-form'; ?>" class="button-primary">Huur nu een auto</a>
                 <img src="assets/images/car-rent-header-image-1.png" alt="">
                 <img src="assets/images/header-circle-background.svg" alt="" class="background-header-element">
             </div>
             <div class="advertorial">
                 <h2>Wij verhuren ook bedrijfswagens</h2>
                 <p>Voor een vaste lage prijs met prettig voordelen.</p>
-                <a href="#" class="button-primary">Huur een bedrijfswagen</a>
-                <img src="assets/images/car-rent-header-image-2.png" alt="">
+                <a href="<?php echo isset($_SESSION['id']) ? '/ons-aanbod?type=bedrijfswagen' : '/register-form'; ?>" class="button-primary">Huur een bedrijfswagen</a>
+                <img src="assets/images/products/Car (5).svg" alt="SUV" style="transform: scale(1.4); width: 80%; max-width: 225px; height: auto; margin-top: 15px; margin-bottom: 15px;">
                 <img src="assets/images/header-block-background.svg" alt="" class="background-header-element">
             </div>
         </div>
@@ -20,8 +20,8 @@
 
     <main>
         <div class="section-header">
-            <h2 class="section-title">Popular Cars</h2>
-            <a href="/ons-aanbod" class="view-all">View All</a>
+            <h2 class="section-title">Populaire Auto's</h2>
+            <a href="/ons-aanbod" class="view-all">Bekijk Alles</a>
         </div>
         <div class="car-grid">
             <?php 
@@ -55,24 +55,24 @@
                     </div>
                     <div class="car-specs">
                         <div class="spec-item">
-                            <img src="assets/images/icons/gas-station.svg" alt="Fuel">
+                            <img src="assets/images/icons/gas-station.svg" alt="Brandstof">
                             <span><?= $car['gasoline'] ?></span>
                         </div>
                         <div class="spec-item">
-                            <img src="assets/images/icons/car.svg" alt="Manual">
+                            <img src="assets/images/icons/car.svg" alt="Handmatig">
                             <span><?= $car['steering'] ?></span>
                         </div>
                         <div class="spec-item">
-                            <img src="assets/images/icons/profile-2user.svg" alt="People">
+                            <img src="assets/images/icons/profile-2user.svg" alt="Personen">
                             <span><?= $car['capacity'] ?></span>
                         </div>
                     </div>
                     <div class="car-footer">
                         <div class="price">
                             <span class="amount">€<?= number_format((float)$car['price'], 2, ',', '.') ?></span>
-                            <span class="period">/day</span>
+                            <span class="period">/dag</span>
                         </div>
-                        <a href="/car-detail?id=<?= $car['id'] ?>" class="rent-now-btn">Rent Now</a>
+                        <a href="/car-detail?id=<?= $car['id'] ?>" class="rent-now-btn">Huur Nu</a>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -81,7 +81,7 @@
 
         
         <div class="show-more-cars">
-            <a class="button-primary" href="/ons-aanbod">Show more cars</a>
+            <a class="button-primary" href="/ons-aanbod">Meer auto's bekijken</a>
         </div>
     </main>
 

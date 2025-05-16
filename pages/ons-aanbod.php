@@ -10,16 +10,30 @@
                         <input type="checkbox" id="sport" name="type" value="sport" checked>
                         <label for="sport">Sport (10)</label>
                     </div>
-                </div>
-            </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sport" name="type" value="sport" checked>
+                        <label for="sport">Suv (10)</label>
 
-            <div class="filter-section">
-                <h3>PRIJS</h3>
-                <div class="price-slider">
-                    <input type="range" min="0" max="500" value="300" class="slider" id="price-range">
-                    <div class="price-range-labels">
-                        <span>€0</span>
-                        <span>Max. €300,00</span>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sport" name="type" value="sport" checked>
+                        <label for="sport">Mpv (10)</label>
+
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sport" name="type" value="sport" checked>
+                        <label for="sport">Sedan (10)</label>
+
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sport" name="type" value="sport" checked>
+                        <label for="sport">Coupe (10)</label>
+
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sport" name="type" value="sport" checked>
+                        <label for="sport">Hatchback (10)</label>
+
                     </div>
                 </div>
             </div>
@@ -36,8 +50,22 @@
                 require_once __DIR__ . "/../database/connection.php";
                 
                 try {
-                    // Fetch all cars from database
-                    $stmt = $conn->query("SELECT * FROM cars");
+                    // Check if we have a type filter from the URL
+                    $typeFilter = isset($_GET['type']) ? $_GET['type'] : null;
+                    
+                    if ($typeFilter === 'bedrijfswagen') {
+                        // For bedrijfswagen, we'll filter to show only vans/commercial vehicles (SUVs in our case)
+                        $stmt = $conn->prepare("SELECT * FROM cars WHERE type = 'SUV'");
+                        $stmt->execute();
+                    } else if ($typeFilter) {
+                        // For any other type filter
+                        $stmt = $conn->prepare("SELECT * FROM cars WHERE type = ?");
+                        $stmt->execute([$typeFilter]);
+                    } else {
+                        // No filter, show all cars
+                        $stmt = $conn->query("SELECT * FROM cars");
+                    }
+                    
                     $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 } catch (PDOException $e) {
                     echo "<div class='message'>Database error: " . $e->getMessage() . "</div>";
@@ -61,15 +89,15 @@
                     </div>
                     <div class="car-specs">
                         <div class="spec-item">
-                            <img src="assets/images/icons/gas-station.svg" alt="Fuel">
+                            <img src="assets/images/icons/gas-station.svg" alt="Brandstof">
                             <span><?= $car['gasoline'] ?></span>
                         </div>
                         <div class="spec-item">
-                            <img src="assets/images/icons/car.svg" alt="Manual">
+                            <img src="assets/images/icons/car.svg" alt="Handmatig">
                             <span><?= $car['steering'] ?></span>
                         </div>
                         <div class="spec-item">
-                            <img src="assets/images/icons/profile-2user.svg" alt="People">
+                            <img src="assets/images/icons/profile-2user.svg" alt="Personen">
                             <span><?= $car['capacity'] ?></span>
                         </div>
                     </div>
@@ -78,14 +106,10 @@
                             <span class="amount">€<?= number_format((float)$car['price'], 2, ',', '.') ?></span>
                             <span class="period">/dag</span>
                         </div>
-                        <a href="/car-detail?id=<?= $car['id'] ?>" class="rent-now-btn">Rent Now</a>
+                        <a href="/car-detail?id=<?= $car['id'] ?>" class="rent-now-btn">Huur Nu</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
-            </div>
-
-            <div class="pagination">
-                <div class="page-indicator">10/10</div>
             </div>
         </div>
     </div>

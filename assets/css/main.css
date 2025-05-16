@@ -45,6 +45,9 @@ main {
   padding: 10px 20px;
   max-width: fit-content;
   text-decoration: none;
+  position: relative;
+  z-index: 2;
+  display: inline-block;
 }
 
 .succes-message {
@@ -585,6 +588,7 @@ main {
   padding: 24px;
   flex-direction: column;
   border-radius: 10px;
+  position: relative;
 }
 .advertorial h2 {
   color: white;
@@ -604,9 +608,19 @@ main {
   max-width: 75%;
   margin: 0 auto;
 }
+
+/* Specifieke styling voor de SUV-afbeelding */
+.advertorial:nth-child(2) img:first-of-type {
+  max-width: 85%;
+  margin-top: 10px;
+  height: auto;
+}
 .advertorial .background-header-element {
   position: absolute;
   z-index: 0;
+  top: 0;
+  right: 0;
+  pointer-events: none;
 }
 
 footer {
