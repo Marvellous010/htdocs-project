@@ -44,7 +44,7 @@
             </div>
         </div>
         <?php }else{ ?>
-            <a href="" class="button-primary">Start met huren</a>
+            <a href="/register-form" class="button-primary">Start met huren</a>
         <?php } ?>
 
     </div>

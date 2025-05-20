@@ -1,3 +1,4 @@
+// Account dropdown functionaliteit
 const accountImage = document.querySelector('.account img');
 if (accountImage) {
     accountImage.addEventListener('click', function () {
@@ -13,28 +14,25 @@ if (accountImage) {
     });
 }
 
-const startButton = document.querySelector('.button-primary');
-if (startButton) {
-    startButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        const modal = document.getElementById('loginModal');
-        if (modal) modal.classList.remove('hidden');
-    });
-}
-
-const modalClose = document.querySelector('.modal-close');
-if (modalClose) {
-    modalClose.addEventListener('click', function () {
-        const modal = document.getElementById('loginModal');
-        if (modal) modal.classList.add('hidden');
-    });
-}
-
-const modal = document.getElementById('loginModal');
-if (modal) {
-    modal.addEventListener('click', function (e) {
-        if (e.target === this) {
-            this.classList.add('hidden');
+// DIRECT NAVIGATIE: Zorg dat het modal NOOIT opent, ongeacht welke knop je klikt
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Verberg het login modal definitief
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        loginModal.style.display = 'none';
+        loginModal.remove(); // Verwijder het element volledig uit de DOM
+    }
+    
+    // 2. Override alle eventListeners voor buttons
+    document.body.addEventListener('click', function(e) {
+        // Als het een knop is met een href attribuut
+        if (e.target.tagName === 'A' && e.target.getAttribute('href')) {
+            // Voorkom de standaard werking van het modal
+            const href = e.target.getAttribute('href');
+            if (e.target.hasAttribute('data-direct-link')) {
+                e.preventDefault();
+                window.location.href = href;
+            }
         }
-    });
-}
+    }, true); // Capture fase - hierdoor worden andere handlers niet uitgevoerd
+});

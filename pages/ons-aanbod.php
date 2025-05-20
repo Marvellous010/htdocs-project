@@ -3,40 +3,50 @@
 <main class="aanbod-page">
     <div class="aanbod-container">
         <div class="filters-sidebar">
-            <div class="filter-section">
-                <h3>TYPE</h3>
-                <div class="filter-options">
-                    <div class="filter-option">
-                        <input type="checkbox" id="sport" name="type" value="sport" checked>
-                        <label for="sport">Sport (10)</label>
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="sport" name="type" value="sport" checked>
-                        <label for="sport">Suv (10)</label>
-
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="sport" name="type" value="sport" checked>
-                        <label for="sport">Mpv (10)</label>
-
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="sport" name="type" value="sport" checked>
-                        <label for="sport">Sedan (10)</label>
-
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="sport" name="type" value="sport" checked>
-                        <label for="sport">Coupe (10)</label>
-
-                    </div>
-                    <div class="filter-option">
-                        <input type="checkbox" id="sport" name="type" value="sport" checked>
-                        <label for="sport">Hatchback (10)</label>
-
+            <form id="filter-form" method="get" action="/ons-aanbod">
+                <div class="filter-section">
+                    <h3>TYPE</h3>
+                    <div class="filter-options">
+                        <?php 
+                        // Haal de geselecteerde filters op
+                        $selectedFilters = isset($_GET['filters']) ? $_GET['filters'] : [];
+                        
+                        // Als de bedrijfswagen filter is toegepast, zorg dat SUV automatisch is geselecteerd
+                        if (isset($_GET['type']) && $_GET['type'] === 'bedrijfswagen') {
+                            $selectedFilters[] = 'SUV';
+                        }
+                        // Als de reguliere auto filter is toegepast, selecteer alle types behalve SUV
+                        elseif (isset($_GET['type']) && $_GET['type'] === 'regular') {
+                            $selectedFilters = ['Sport', 'Sedan', 'Hatchback'];
+                        }
+                        
+                        // Definieer alle beschikbare autotypes
+                        $autoTypes = [
+                            'Sport' => 'Sport',
+                            'SUV' => 'SUV',
+                            'Sedan' => 'Sedan',
+                            'Hatchback' => 'Hatchback'
+                        ];
+                        
+                        // Genereer checkboxes voor elk autotype
+                        foreach ($autoTypes as $value => $label): ?>
+                            <div class="filter-option">
+                                <input type="checkbox" 
+                                       id="type-<?= strtolower($value) ?>" 
+                                       name="filters[]" 
+                                       value="<?= $value ?>" 
+                                       class="car-type-filter"
+                                       <?= in_array($value, $selectedFilters) ? 'checked' : '' ?>>
+                                <label for="type-<?= strtolower($value) ?>"><?= $label ?></label>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
-            </div>
+                <div class="filter-actions" style="margin-top: 20px;">
+                    <button type="submit" class="button-primary">Filters toepassen</button>
+                    <a href="/ons-aanbod" class="button-secondary" style="margin-top: 10px; display: inline-block;">Reset filters</a>
+                </div>
+            </form>
         </div>
 
         <div class="car-listings">
@@ -50,19 +60,29 @@
                 require_once __DIR__ . "/../database/connection.php";
                 
                 try {
-                    // Check if we have a type filter from the URL
+                    // Initiële status van checkboxes instellen op basis van query parameters
+                    $selectedFilters = isset($_GET['filters']) ? $_GET['filters'] : [];
+                    
+                    // Check of we een type filter hebben vanuit de URL (voor de knoppen op de homepage)
                     $typeFilter = isset($_GET['type']) ? $_GET['type'] : null;
                     
+                    // SQL samenstellen
                     if ($typeFilter === 'bedrijfswagen') {
-                        // For bedrijfswagen, we'll filter to show only vans/commercial vehicles (SUVs in our case)
+                        // Voor bedrijfswagens, toon alleen SUVs
                         $stmt = $conn->prepare("SELECT * FROM cars WHERE type = 'SUV'");
                         $stmt->execute();
-                    } else if ($typeFilter) {
-                        // For any other type filter
-                        $stmt = $conn->prepare("SELECT * FROM cars WHERE type = ?");
-                        $stmt->execute([$typeFilter]);
+                    } else if ($typeFilter === 'regular') {
+                        // Voor reguliere auto's, toon alles behalve SUVs
+                        $stmt = $conn->prepare("SELECT * FROM cars WHERE type != 'SUV'");
+                        $stmt->execute();
+                    } else if (!empty($selectedFilters)) {
+                        // Filters vanuit de checkbox sidebar
+                        $placeholders = str_repeat('?,', count($selectedFilters) - 1) . '?';
+                        $sql = "SELECT * FROM cars WHERE type IN ($placeholders)";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute($selectedFilters);
                     } else {
-                        // No filter, show all cars
+                        // Geen filter, toon alle auto's
                         $stmt = $conn->query("SELECT * FROM cars");
                     }
                     

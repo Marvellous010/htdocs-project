@@ -966,11 +966,29 @@ footer .footer-links .links ul a {
 .show-more-cars .button-primary {
   background-color: #3563E9;
   color: white;
-  border-radius: 4px;
-  padding: 10px 20px;
-  text-decoration: none;
-  font-size: 14px;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1.5rem;
   font-weight: 500;
+  display: inline-block;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.direct-link {
+  background-color: #3563E9;
+  color: white;
+  text-decoration: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
 }
 
 .account-form {

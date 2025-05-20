@@ -64,9 +64,9 @@ try {
     (6, 'CR - V', 'SUV', '6 People', 'Manual', '80L', 80.00, 100.00, 0, '0', 'Car (5).svg', 1),
     (7, 'All New Terios', 'SUV', '6 People', 'Manual', '90L', 74.00, 90.00, 0, '0', 'Car (6).svg', 0),
     (8, 'CR - V', 'SUV', '6 People', 'Manual', '80L', 80.00, 100.00, 0, '0', 'Car (7).svg', 1),
-    (9, 'MG ZX Exclusive', 'Hatchback', '4 People', 'Manual', '70L', 76.00, 80.00, 0, '0', 'Car (8).svg', 1),
+    (9, 'MG ZX Exclusive', 'Hatchback', '4 People', 'Electric', '70L', 76.00, 80.00, 0, '0', 'Car (8).svg', 1),
     (10, 'New MG ZS', 'SUV', '6 People', 'Manual', '80L', 80.00, 100.00, 0, '0', 'Car (9).svg', 0),
-    (11, 'MG ZX Excite', 'Hatchback', '4 People', 'Manual', '90L', 74.00, 80.00, 0, '0', 'Car (10).svg', 1),
+    (11, 'MG ZX Excite', 'Hatchback', '4 People', 'Electric', '90L', 74.00, 80.00, 0, '0', 'Car (10).svg', 1),
     (12, 'New MG ZS', 'SUV', '6 People', 'Manual', '80L', 80.00, 100.00, 0, '0', 'Car (11).svg', 0)");
     
     // Add descriptions for each car
