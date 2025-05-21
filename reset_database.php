@@ -58,7 +58,7 @@ try {
     $conn->exec("INSERT INTO cars (id, brand, type, capacity, steering, gasoline, price, old_price, rating, reviews_count, main_image, is_favorite) VALUES
     (1, 'Koenigsegg', 'Sport', '2 People', 'Manual', '70L', 99.00, 120.00, 0, '0', 'car (0).svg', 1),
     (2, 'Nissan GT - R', 'Sport', '2 People', 'Manual', '70L', 80.00, 100.00, 0, '0', 'car (1).svg', 0),
-    (3, 'Rolls - Royce', 'Sedan', '4 People', 'Manual', '70L', 96.00, 120.00, 0, '0', 'Car (2).svg', 1),
+    (3, 'Rolls - Royce - Dawn', 'Sedan', '4 People', 'Manual', '70L', 96.00, 120.00, 0, '0', 'Car (2).svg', 1),
     (4, 'Nissan GT - R', 'Sport', '2 People', 'Manual', '70L', 80.00, 100.00, 0, '0', 'Car (3).svg', 0),
     (5, 'All New Rush', 'SUV', '6 People', 'Manual', '70L', 72.00, 80.00, 0, '0', 'Car (4).svg', 0),
     (6, 'CR - V', 'SUV', '6 People', 'Manual', '80L', 80.00, 100.00, 0, '0', 'Car (5).svg', 1),

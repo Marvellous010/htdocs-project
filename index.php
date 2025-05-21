@@ -48,6 +48,16 @@ if ($path === 'toggle-like') {
     exit;
 }
 
+if ($path === 'account') {
+    require_once __DIR__ . '/pages/account.php';
+    exit;
+}
+
+if ($path === 'update-account') {
+    require_once __DIR__ . '/actions/update-account.php';
+    exit;
+}
+
 $page = $path ?: 'home';
 $file = __DIR__ . '/pages/' . $page . '.php';
 
