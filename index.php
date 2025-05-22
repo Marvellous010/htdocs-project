@@ -58,6 +58,21 @@ if ($path === 'update-account') {
     exit;
 }
 
+if ($path === 'create-reservation') {
+    require_once __DIR__ . '/actions/create-reservation.php';
+    exit;
+}
+
+if ($path === 'my-reservations') {
+    require_once __DIR__ . '/pages/my-reservations.php';
+    exit;
+}
+
+if ($path === 'hulp') {
+    require_once __DIR__ . '/pages/hulp.php';
+    exit;
+}
+
 $page = $path ?: 'home';
 $file = __DIR__ . '/pages/' . $page . '.php';
 

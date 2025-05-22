@@ -10,7 +10,7 @@
             <ul>
                 <li><a href="/over-ons">Het team</a></li>
                 <li><a href="#">Onze visie</a></li>
-                <li><a href="#">Vacatures</a></li>
+                <li><a href="/vacatures">Vacatures</a></li>
             </ul>
         </div>
         <div class="links">

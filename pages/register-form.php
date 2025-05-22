@@ -16,6 +16,11 @@
         <label for="confirm-password">Herhaal wachtwoord</label>
         <input type="password" name="confirm-password" id="confirm-password" placeholder="Uw wachtwoord" required>
         <input type="submit" value="Maak account aan" class="button-primary">
+        
+        <div class="login-redirect">
+            <p>Heeft u al een account?</p>
+            <a href="/login-form" class="button-secondary">Inloggen</a>
+        </div>
     </form>
 </main>
 

@@ -11,8 +11,10 @@ if (session_status() == PHP_SESSION_NONE) {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Rydr</title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="icon" type="image/png" href="assets/images/favicon.ico" sizes="32x32">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/reservation.css">
+    <link rel="stylesheet" href="/assets/css/dropdown.css">
+    <link rel="icon" type="image/png" href="/assets/images/favicon.ico" sizes="32x32">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
@@ -27,23 +29,24 @@ if (session_status() == PHP_SESSION_NONE) {
     </div>
     <form action="">
         <input type="search" name="" id="" placeholder="Welke auto wilt u huren?">
-        <img src="assets/images/icons/search-normal.svg" alt="" class="search-icon">
+        <img src="/assets/images/icons/search-normal.svg" alt="" class="search-icon">
     </form>
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/ons-aanbod">Ons aanbod</a></li>
-            <li><a href="#">Hulp nodig?</a></li>
+            <li><a href="/hulp">Hulp nodig?</a></li>
         </ul>
     </nav>
     <div class="menu">
         <?php if(isset($_SESSION['id'])){ ?>
         <div class="account">
-            <img src="assets/images/profil.png" alt="">
+            <img src="/assets/images/profil.png" alt="">
             <div class="account-dropdown">
                 <ul>
-                    <li><img src="assets/images/icons/setting.svg" alt=""><a href="/account">Naar account</a></li>
-                    <li><img src="assets/images/icons/logout.svg" alt=""><a href="/logout">Uitloggen</a></li>
+                    <li><img src="/assets/images/icons/setting.svg" alt=""><a href="/account">Naar account</a></li>
+                    <li><img src="/assets/images/icons/car.svg" alt=""><a href="/my-reservations">Mijn reserveringen</a></li>
+                    <li><img src="/assets/images/icons/logout.svg" alt=""><a href="/logout">Uitloggen</a></li>
                 </ul>
             </div>
         </div>

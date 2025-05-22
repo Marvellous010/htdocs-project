@@ -98,7 +98,7 @@
             <div class="join-content">
                 <h2>Word onderdeel van ons team</h2>
                 <p>Wij zijn altijd op zoek naar gedreven professionals die ons team komen versterken. Bekijk onze vacatures of neem contact met ons op om de mogelijkheden te bespreken.</p>
-                <a href="#" class="button-primary">Bekijk vacatures</a>
+                <a href="/vacatures" class="button-primary">Bekijk vacatures</a>
             </div>
         </section>
     </div>

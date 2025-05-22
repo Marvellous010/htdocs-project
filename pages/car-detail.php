@@ -125,7 +125,42 @@ if (isset($_GET['error'])) {
                         <div class="current-price">€<?= isset($car['price']) ? $car['price'] : '0,00' ?><span class="price-period">/dag</span></div>
                         <div class="old-price">€<?= isset($car['old_price']) ? $car['old_price'] : '0,00' ?></div>
                     </div>
-                    <a href="#" class="rent-now-button">Huur Nu</a>
+                </div>
+                
+                <div class="reservation-form">
+                    <h3>Reserveer deze auto</h3>
+                    <?php if(!isset($_SESSION['id'])): ?>
+                        <div class="login-notice">
+                            <p>U moet ingelogd zijn om een reservering te maken</p>
+                            <a href="/login-form" class="button-secondary">Inloggen</a>
+                            <a href="/register-form" class="button-primary small">Account aanmaken</a>
+                        </div>
+                    <?php else: ?>
+                        <form action="/create-reservation" method="post">
+                            <input type="hidden" name="car_id" value="<?= $car['id'] ?>">
+                            <input type="hidden" name="price_per_day" value="<?= isset($car['price']) ? $car['price'] : '0,00' ?>">
+                            
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="pickup_date">Ophaaldatum</label>
+                                    <input type="date" id="pickup_date" name="pickup_date" required min="<?= date('Y-m-d') ?>">
+                                </div>
+                                <div class="form-group half">
+                                    <label for="return_date">Retourdatum</label>
+                                    <input type="date" id="return_date" name="return_date" required min="<?= date('Y-m-d', strtotime('+1 day')) ?>">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Geschatte kosten</label>
+                                <div class="cost-estimate">
+                                    <span id="total_days">0</span> dagen x €<?= isset($car['price']) ? $car['price'] : '0,00' ?> = €<span id="total_cost">0,00</span>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="rent-now-button full-width">Reservering bevestigen</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -207,5 +242,65 @@ if (isset($_GET['error'])) {
 </main>
 
 <!-- JavaScript for like functionality removed as requested -->
+
+<?php if (isset($_SESSION['reservation_error'])): ?>
+<script>
+    // Show reservation error
+    alert('<?= $_SESSION['reservation_error'] ?>');
+</script>
+<?php unset($_SESSION['reservation_error']); ?>
+<?php endif; ?>
+
+<script>
+    // Calculate total cost for reservation
+    document.addEventListener('DOMContentLoaded', function() {
+        const pickupDateInput = document.getElementById('pickup_date');
+        const returnDateInput = document.getElementById('return_date');
+        const totalDaysSpan = document.getElementById('total_days');
+        const totalCostSpan = document.getElementById('total_cost');
+        const pricePerDay = <?= isset($car['price']) ? $car['price'] : '0' ?>;
+
+        function calculateTotal() {
+            if (pickupDateInput.value && returnDateInput.value) {
+                const pickupDate = new Date(pickupDateInput.value);
+                const returnDate = new Date(returnDateInput.value);
+                
+                if (returnDate > pickupDate) {
+                    const diffTime = Math.abs(returnDate - pickupDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    totalDaysSpan.textContent = diffDays;
+                    totalCostSpan.textContent = (diffDays * pricePerDay).toFixed(2).replace('.', ',');
+                } else {
+                    totalDaysSpan.textContent = '0';
+                    totalCostSpan.textContent = '0,00';
+                }
+            }
+        }
+
+        pickupDateInput?.addEventListener('change', calculateTotal);
+        returnDateInput?.addEventListener('change', calculateTotal);
+        
+        // Set min date for return date to be at least one day after pickup date
+        pickupDateInput?.addEventListener('change', function() {
+            if (pickupDateInput.value) {
+                const nextDay = new Date(pickupDateInput.value);
+                nextDay.setDate(nextDay.getDate() + 1);
+                
+                const year = nextDay.getFullYear();
+                const month = String(nextDay.getMonth() + 1).padStart(2, '0');
+                const day = String(nextDay.getDate()).padStart(2, '0');
+                
+                returnDateInput.min = `${year}-${month}-${day}`;
+                
+                // If current return date is before new min date, update it
+                if (returnDateInput.value && new Date(returnDateInput.value) < nextDay) {
+                    returnDateInput.value = `${year}-${month}-${day}`;
+                    calculateTotal();
+                }
+            }
+        });
+    });
+</script>
 
 <?php require "includes/footer.php" ?>
