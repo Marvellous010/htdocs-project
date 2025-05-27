@@ -73,6 +73,26 @@ if ($path === 'hulp') {
     exit;
 }
 
+if ($path === 'onze-visie') {
+    require_once __DIR__ . '/pages/onze-visie.php';
+    exit;
+}
+
+if ($path === 'events') {
+    require_once __DIR__ . '/pages/events.php';
+    exit;
+}
+
+if ($path === 'blog') {
+    require_once __DIR__ . '/pages/blog.php';
+    exit;
+}
+
+if ($path === 'podcast') {
+    require_once __DIR__ . '/pages/podcast.php';
+    exit;
+}
+
 $page = $path ?: 'home';
 $file = __DIR__ . '/pages/' . $page . '.php';
 

@@ -2,6 +2,9 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
+// Database connectie voor profielfoto
+require_once __DIR__ . "/../database/connection.php";
 ?>
 <!doctype html>
 <html lang="en">
@@ -27,9 +30,21 @@ if (session_status() == PHP_SESSION_NONE) {
             Rydr.
         </a>
     </div>
-    <form action="">
-        <input type="search" name="" id="" placeholder="Welke auto wilt u huren?">
-        <img src="/assets/images/icons/search-normal.svg" alt="" class="search-icon">
+    <form action="/ons-aanbod" method="get" class="search-form">
+        
+           
+        <?php 
+        // Als er filters zijn geselecteerd, behoud deze in de zoekopdracht
+        if (isset($_GET['filters']) && is_array($_GET['filters'])) {
+            foreach ($_GET['filters'] as $filter) {
+                echo "<input type='hidden' name='filters[]' value='" . htmlspecialchars($filter) . "'>";
+            }
+        }
+        // Behoud type filter als die aanwezig is
+        if (isset($_GET['type'])) {
+            echo "<input type='hidden' name='type' value='" . htmlspecialchars($_GET['type']) . "'>";
+        }
+        ?>
     </form>
     <nav>
         <ul>
@@ -39,9 +54,16 @@ if (session_status() == PHP_SESSION_NONE) {
         </ul>
     </nav>
     <div class="menu">
-        <?php if(isset($_SESSION['id'])){ ?>
+        <?php if(isset($_SESSION['id'])){ 
+            // Haal gebruikersgegevens op voor profielfoto
+            $profile_stmt = $conn->prepare("SELECT profile_image FROM account WHERE id = :id");
+            $profile_stmt->bindParam(":id", $_SESSION['id']);
+            $profile_stmt->execute();
+            $profile_data = $profile_stmt->fetch(PDO::FETCH_ASSOC);
+            $profile_image = !empty($profile_data['profile_image']) ? '/' . $profile_data['profile_image'] : '/assets/images/profil.png';
+        ?>
         <div class="account">
-            <img src="/assets/images/profil.png" alt="">
+            <img src="<?= $profile_image ?>" alt="">
             <div class="account-dropdown">
                 <ul>
                     <li><img src="/assets/images/icons/setting.svg" alt=""><a href="/account">Naar account</a></li>

@@ -1,4 +1,4 @@
-<?php require "includes/header.php" ?>
+<?php require __DIR__ . "/../includes/header.php" ?>
 
 <main class="aanbod-page">
     <div class="aanbod-container">
@@ -52,6 +52,24 @@
         <div class="car-listings">
             <div class="listings-header">
                 <h2>Ons Aanbod</h2>
+                <div class="search-container">
+                    <form action="" method="get" class="search-form">
+                        <input type="text" name="search" placeholder="Zoek op merk, type..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+                        <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+                        <?php 
+                        // Als er filters zijn geselecteerd, behoud deze in de zoekopdracht
+                        if (isset($_GET['filters']) && is_array($_GET['filters'])) {
+                            foreach ($_GET['filters'] as $filter) {
+                                echo "<input type='hidden' name='filters[]' value='" . htmlspecialchars($filter) . "'>";
+                            }
+                        }
+                        // Behoud type filter als die aanwezig is
+                        if (isset($_GET['type'])) {
+                            echo "<input type='hidden' name='type' value='" . htmlspecialchars($_GET['type']) . "'>";
+                        }
+                        ?>
+                    </form>
+                </div>
             </div>
 
             <div class="car-grid">
@@ -66,23 +84,44 @@
                     // Check of we een type filter hebben vanuit de URL (voor de knoppen op de homepage)
                     $typeFilter = isset($_GET['type']) ? $_GET['type'] : null;
                     
+                    // Zoekterm ophalen
+                    $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
+                    
+                    // Parameterarray voor prepared statements
+                    $params = [];
+                    $conditions = [];
+                    
                     // SQL samenstellen
                     if ($typeFilter === 'bedrijfswagen') {
                         // Voor bedrijfswagens, toon alleen SUVs
-                        $stmt = $conn->prepare("SELECT * FROM cars WHERE type = 'SUV'");
-                        $stmt->execute();
+                        $conditions[] = "type = 'SUV'";
                     } else if ($typeFilter === 'regular') {
                         // Voor reguliere auto's, toon alles behalve SUVs
-                        $stmt = $conn->prepare("SELECT * FROM cars WHERE type != 'SUV'");
-                        $stmt->execute();
+                        $conditions[] = "type != 'SUV'";
                     } else if (!empty($selectedFilters)) {
                         // Filters vanuit de checkbox sidebar
                         $placeholders = str_repeat('?,', count($selectedFilters) - 1) . '?';
-                        $sql = "SELECT * FROM cars WHERE type IN ($placeholders)";
+                        $conditions[] = "type IN ($placeholders)";
+                        $params = array_merge($params, $selectedFilters);
+                    }
+                    
+                    // Zoekconditie toevoegen als er een zoekterm is
+                    if (!empty($searchTerm)) {
+                        $searchCondition = "(brand LIKE ? OR type LIKE ? OR description LIKE ?)";
+                        $conditions[] = $searchCondition;
+                        $params[] = "%$searchTerm%";
+                        $params[] = "%$searchTerm%";
+                        $params[] = "%$searchTerm%";
+                    }
+                    
+                    // Query samenstellen
+                    if (!empty($conditions)) {
+                        $whereClause = " WHERE " . implode(" AND ", $conditions);
+                        $sql = "SELECT * FROM cars" . $whereClause;
                         $stmt = $conn->prepare($sql);
-                        $stmt->execute($selectedFilters);
+                        $stmt->execute($params);
                     } else {
-                        // Geen filter, toon alle auto's
+                        // Geen filter of zoekterm, toon alle auto's
                         $stmt = $conn->query("SELECT * FROM cars");
                     }
                     
@@ -135,4 +174,73 @@
     </div>
 </main>
 
-<?php require "includes/footer.php" ?>
+<style>
+    /* Zoekbalk styling */
+    .listings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .search-container {
+        margin-left: auto;
+    }
+    
+    .search-form {
+        display: flex;
+        position: relative;
+    }
+    
+    .search-form input[type="text"] {
+        width: 280px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .search-form input[type="text"]:focus {
+        border-color: #3563E9;
+        box-shadow: 0 0 0 2px rgba(53, 99, 233, 0.2);
+        outline: none;
+    }
+    
+    .search-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    
+    .search-button:hover {
+        color: #3563E9;
+    }
+    
+    /* Responsieve styling */
+    @media (max-width: 768px) {
+        .listings-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .search-container {
+            width: 100%;
+            margin-top: 15px;
+            margin-left: 0;
+        }
+        
+        .search-form input[type="text"] {
+            width: 100%;
+        }
+    }
+</style>
+
+<?php require __DIR__ . "/../includes/footer.php" ?>

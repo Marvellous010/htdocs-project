@@ -9,16 +9,16 @@
             <h3>Over ons</h3>
             <ul>
                 <li><a href="/over-ons">Het team</a></li>
-                <li><a href="#">Onze visie</a></li>
+                <li><a href="/onze-visie">Onze visie</a></li>
                 <li><a href="/vacatures">Vacatures</a></li>
             </ul>
         </div>
         <div class="links">
             <h3>Community</h3>
             <ul>
-                <li><a href="#">Events</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Podcast</a></li>
+                <li><a href="/events">Events</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/podcast">Podcast</a></li>
                 <li><a href="#">Nodig een vriend uit</a></li>
             </ul>
         </div>
@@ -57,8 +57,8 @@
         <button class="modal-close">&times;</button>
     </div>
 </div>
-<script src="assets/javascript/main.js"></script>
-<script src="assets/js/like-car.js"></script>
+<script src="/assets/javascript/main.js"></script>
+<script src="/assets/js/like-car.js"></script>
 
 </body>
 </html>
