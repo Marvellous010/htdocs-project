@@ -17,6 +17,7 @@ require_once __DIR__ . "/../database/connection.php";
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/reservation.css">
     <link rel="stylesheet" href="/assets/css/dropdown.css">
+    <link rel="stylesheet" href="/assets/css/responsive.css">
     <link rel="icon" type="image/png" href="/assets/images/favicon.ico" sizes="32x32">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,8 +32,7 @@ require_once __DIR__ . "/../database/connection.php";
         </a>
     </div>
     <form action="/ons-aanbod" method="get" class="search-form">
-        
-           
+       
         <?php 
         // Als er filters zijn geselecteerd, behoud deze in de zoekopdracht
         if (isset($_GET['filters']) && is_array($_GET['filters'])) {

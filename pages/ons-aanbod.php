@@ -1,35 +1,93 @@
 <?php require __DIR__ . "/../includes/header.php" ?>
 
+<?php
+// Hulpfuncties voor de pagina
+function getFilters() {
+    // Haal de geselecteerde filters op
+    $selectedFilters = isset($_GET['filters']) ? $_GET['filters'] : [];
+    
+    // Verwerk specifieke filtertype uit URL parameters
+    if (isset($_GET['type'])) {
+        if ($_GET['type'] === 'bedrijfswagen') {
+            $selectedFilters = ['SUV'];
+        } elseif ($_GET['type'] === 'regular') {
+            $selectedFilters = ['Sport', 'Sedan', 'Hatchback'];
+        }
+    }
+    
+    return $selectedFilters;
+}
+
+function getCars($conn) {
+    // Haal filter parameters op
+    $selectedFilters = getFilters();
+    $typeFilter = isset($_GET['type']) ? $_GET['type'] : null;
+    $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
+    
+    $params = [];
+    $conditions = [];
+    
+    // Filter op voertuigtype
+    if ($typeFilter === 'bedrijfswagen') {
+        $conditions[] = "type = 'SUV'";
+    } elseif ($typeFilter === 'regular') {
+        $conditions[] = "type != 'SUV'";
+    } elseif (!empty($selectedFilters)) {
+        $placeholders = str_repeat('?,', count($selectedFilters) - 1) . '?';
+        $conditions[] = "type IN ($placeholders)";
+        $params = array_merge($params, $selectedFilters);
+    }
+    
+    // Filter op zoekterm
+    if (!empty($searchTerm)) {
+        $conditions[] = "(brand LIKE ? OR type LIKE ? OR description LIKE ?)";
+        $params[] = "%$searchTerm%";
+        $params[] = "%$searchTerm%";
+        $params[] = "%$searchTerm%";
+    }
+    
+    // Query uitvoeren
+    if (!empty($conditions)) {
+        $whereClause = " WHERE " . implode(" AND ", $conditions);
+        $sql = "SELECT * FROM cars" . $whereClause;
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+    } else {
+        $stmt = $conn->query("SELECT * FROM cars");
+    }
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Database verbinding maken
+require_once __DIR__ . "/../database/connection.php";
+
+// Data ophalen
+try {
+    $selectedFilters = getFilters();
+    $cars = getCars($conn);
+    $autoTypes = [  // Beschikbare autotypes
+        'Sport' => 'Sport',
+        'SUV' => 'SUV',
+        'Sedan' => 'Sedan',
+        'Hatchback' => 'Hatchback'
+    ];
+} catch (PDOException $e) {
+    echo "<div class='message'>Database error: " . $e->getMessage() . "</div>";
+    $cars = [];
+    $selectedFilters = [];
+}
+?>
+
 <main class="aanbod-page">
     <div class="aanbod-container">
+        <!-- Filter sidebar -->
         <div class="filters-sidebar">
             <form id="filter-form" method="get" action="/ons-aanbod">
                 <div class="filter-section">
                     <h3>TYPE</h3>
                     <div class="filter-options">
-                        <?php 
-                        // Haal de geselecteerde filters op
-                        $selectedFilters = isset($_GET['filters']) ? $_GET['filters'] : [];
-                        
-                        // Als de bedrijfswagen filter is toegepast, zorg dat SUV automatisch is geselecteerd
-                        if (isset($_GET['type']) && $_GET['type'] === 'bedrijfswagen') {
-                            $selectedFilters[] = 'SUV';
-                        }
-                        // Als de reguliere auto filter is toegepast, selecteer alle types behalve SUV
-                        elseif (isset($_GET['type']) && $_GET['type'] === 'regular') {
-                            $selectedFilters = ['Sport', 'Sedan', 'Hatchback'];
-                        }
-                        
-                        // Definieer alle beschikbare autotypes
-                        $autoTypes = [
-                            'Sport' => 'Sport',
-                            'SUV' => 'SUV',
-                            'Sedan' => 'Sedan',
-                            'Hatchback' => 'Hatchback'
-                        ];
-                        
-                        // Genereer checkboxes voor elk autotype
-                        foreach ($autoTypes as $value => $label): ?>
+                        <?php foreach ($autoTypes as $value => $label): ?>
                             <div class="filter-option">
                                 <input type="checkbox" 
                                        id="type-<?= strtolower($value) ?>" 
@@ -42,13 +100,14 @@
                         <?php endforeach; ?>
                     </div>
                 </div>
-                <div class="filter-actions" style="margin-top: 20px;">
+                <div class="filter-actions">
                     <button type="submit" class="button-primary">Filters toepassen</button>
-                    <a href="/ons-aanbod" class="button-secondary" style="margin-top: 10px; display: inline-block;">Reset filters</a>
+                    <a href="/ons-aanbod" class="button-secondary">Reset filters</a>
                 </div>
             </form>
         </div>
 
+        <!-- Auto overzicht -->
         <div class="car-listings">
             <div class="listings-header">
                 <h2>Ons Aanbod</h2>
@@ -56,14 +115,14 @@
                     <form action="" method="get" class="search-form">
                         <input type="text" name="search" placeholder="Zoek op merk, type..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
                         <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
-                        <?php 
-                        // Als er filters zijn geselecteerd, behoud deze in de zoekopdracht
-                        if (isset($_GET['filters']) && is_array($_GET['filters'])) {
-                            foreach ($_GET['filters'] as $filter) {
+                        
+                        <?php // Behoud geselecteerde filters in zoekopdracht
+                        if (!empty($selectedFilters)) {
+                            foreach ($selectedFilters as $filter) {
                                 echo "<input type='hidden' name='filters[]' value='" . htmlspecialchars($filter) . "'>";
                             }
                         }
-                        // Behoud type filter als die aanwezig is
+                        
                         if (isset($_GET['type'])) {
                             echo "<input type='hidden' name='type' value='" . htmlspecialchars($_GET['type']) . "'>";
                         }
@@ -72,67 +131,9 @@
                 </div>
             </div>
 
+            <!-- Autoweergave -->
             <div class="car-grid">
-                <?php
-                // Include database connection
-                require_once __DIR__ . "/../database/connection.php";
-                
-                try {
-                    // Initiële status van checkboxes instellen op basis van query parameters
-                    $selectedFilters = isset($_GET['filters']) ? $_GET['filters'] : [];
-                    
-                    // Check of we een type filter hebben vanuit de URL (voor de knoppen op de homepage)
-                    $typeFilter = isset($_GET['type']) ? $_GET['type'] : null;
-                    
-                    // Zoekterm ophalen
-                    $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
-                    
-                    // Parameterarray voor prepared statements
-                    $params = [];
-                    $conditions = [];
-                    
-                    // SQL samenstellen
-                    if ($typeFilter === 'bedrijfswagen') {
-                        // Voor bedrijfswagens, toon alleen SUVs
-                        $conditions[] = "type = 'SUV'";
-                    } else if ($typeFilter === 'regular') {
-                        // Voor reguliere auto's, toon alles behalve SUVs
-                        $conditions[] = "type != 'SUV'";
-                    } else if (!empty($selectedFilters)) {
-                        // Filters vanuit de checkbox sidebar
-                        $placeholders = str_repeat('?,', count($selectedFilters) - 1) . '?';
-                        $conditions[] = "type IN ($placeholders)";
-                        $params = array_merge($params, $selectedFilters);
-                    }
-                    
-                    // Zoekconditie toevoegen als er een zoekterm is
-                    if (!empty($searchTerm)) {
-                        $searchCondition = "(brand LIKE ? OR type LIKE ? OR description LIKE ?)";
-                        $conditions[] = $searchCondition;
-                        $params[] = "%$searchTerm%";
-                        $params[] = "%$searchTerm%";
-                        $params[] = "%$searchTerm%";
-                    }
-                    
-                    // Query samenstellen
-                    if (!empty($conditions)) {
-                        $whereClause = " WHERE " . implode(" AND ", $conditions);
-                        $sql = "SELECT * FROM cars" . $whereClause;
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute($params);
-                    } else {
-                        // Geen filter of zoekterm, toon alle auto's
-                        $stmt = $conn->query("SELECT * FROM cars");
-                    }
-                    
-                    $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                } catch (PDOException $e) {
-                    echo "<div class='message'>Database error: " . $e->getMessage() . "</div>";
-                    $cars = [];
-                }
-
-                foreach ($cars as $car) :
-                ?>
+                <?php foreach ($cars as $car): ?>
                 <div class="car-card">
                     <div class="car-header">
                         <div class="car-info">

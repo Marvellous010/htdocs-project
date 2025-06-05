@@ -17,7 +17,7 @@
             <h3>Community</h3>
             <ul>
                 <li><a href="/events">Events</a></li>
-                <li><a href="/blog">Blog</a></li>
+                <li><a href="#">Blog</a></li>
                 <li><a href="/podcast">Podcast</a></li>
                 <li><a href="#">Nodig een vriend uit</a></li>
             </ul>

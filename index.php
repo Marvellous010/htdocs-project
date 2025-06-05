@@ -83,10 +83,6 @@ if ($path === 'events') {
     exit;
 }
 
-if ($path === 'blog') {
-    require_once __DIR__ . '/pages/blog.php';
-    exit;
-}
 
 if ($path === 'podcast') {
     require_once __DIR__ . '/pages/podcast.php';
