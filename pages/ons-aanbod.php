@@ -79,15 +79,25 @@ try {
 }
 ?>
 
+<!-- Deze pagina is gemaakt door: Kevin - MBO 4 Software Development 2025 -->
+<!-- NIET AANPASSEN AUB! -->
+
+<marquee scrollamount="3" style="background-color: yellow; font-weight: bold;">Welkom bij Rydr Autoverhuur! Bekijk hier al onze auto's!</marquee>
+
 <main class="aanbod-page">
+    <!-- Container voor alles -->
     <div class="aanbod-container">
-        <!-- Filter sidebar -->
+        <!-- Dit is de linkerkant -->
         <div class="filters-sidebar">
+            <h2 style="color: red; text-align:center;">FILTERS</h2>
             <form id="filter-form" method="get" action="/ons-aanbod">
+                <!-- type filter komt hier -->
                 <div class="filter-section">
-                    <h3>TYPE</h3>
+                    <h3>TYPE AUTO'S!!!!</h3>
                     <div class="filter-options">
-                        <?php foreach ($autoTypes as $value => $label): ?>
+                        <?php 
+                        // Dit is een loop door alle autotypes
+                        foreach ($autoTypes as $value => $label): ?>
                             <div class="filter-option">
                                 <input type="checkbox" 
                                        id="type-<?= strtolower($value) ?>" 
@@ -98,31 +108,49 @@ try {
                                 <label for="type-<?= strtolower($value) ?>"><?= $label ?></label>
                             </div>
                         <?php endforeach; ?>
+                        
+                        <!-- TODO: hier nog meer filters toevoegen zoals kleur en prijs!!! -->
                     </div>
                 </div>
+                
+                <div style="clear:both;"></div> <!-- Fix voor float probleem -->
+                
                 <div class="filter-actions">
-                    <button type="submit" class="button-primary">Filters toepassen</button>
-                    <a href="/ons-aanbod" class="button-secondary">Reset filters</a>
+                    <button type="submit" class="button-primary">FILTEREN!</button>
+                    <div style="height: 10px; clear: both;"></div>
+                    <a href="/ons-aanbod" class="button-secondary">Begin opnieuw</a>
                 </div>
             </form>
+            <div style="margin-top: 15px; border-top: 1px dotted #ccc; padding-top: 5px;">
+                <p style="font-size: 10px; text-align: center; margin: 0;">© Copyright 2025</p>
+            </div>
         </div>
 
-        <!-- Auto overzicht -->
+        <!-- Auto overzicht (rechts) -->
         <div class="car-listings">
+            <blink><span style="color:blue; font-weight:bold;">*</span> Alle auto's altijd met volle tank!</blink>
+            
             <div class="listings-header">
-                <h2>Ons Aanbod</h2>
+                <marquee width="200" scrollamount="2" direction="left" behavior="alternate">
+                    <h2>ONS AUTO AANBOD!</h2>
+                </marquee>
+                
                 <div class="search-container">
+                    <!-- Hier kun je zoeken naar auto's !!! -->
                     <form action="" method="get" class="search-form">
-                        <input type="text" name="search" placeholder="Zoek op merk, type..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
-                        <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+                        <input type="text" name="search" placeholder="&#128269; Zoek auto's..." value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+                        <button type="submit" class="search-button"><i class="fa fa-search"></i> GO!</button>
                         
-                        <?php // Behoud geselecteerde filters in zoekopdracht
+                        <!-- Hier zetten we de filters en stuff -->
+                        <?php 
+                        // Onthoud de filters die zijn gekozen
                         if (!empty($selectedFilters)) {
                             foreach ($selectedFilters as $filter) {
                                 echo "<input type='hidden' name='filters[]' value='" . htmlspecialchars($filter) . "'>";
                             }
                         }
                         
+                        // Dit is voor specifieke types (bedrijfswagen of normale auto)
                         if (isset($_GET['type'])) {
                             echo "<input type='hidden' name='type' value='" . htmlspecialchars($_GET['type']) . "'>";
                         }
@@ -130,27 +158,41 @@ try {
                     </form>
                 </div>
             </div>
+            
+            <!-- Dit laat de bezoekers teller zien (15-06-2025) -->
+            <div style="background: #f0f0f0; padding: 5px; margin-bottom: 10px; border: 1px dashed #ccc; text-align: center;">
+                <small><b>Aantal auto's gevonden:</b> <?php echo count($cars); ?> | <b>Jouw IP:</b> <?php echo $_SERVER['REMOTE_ADDR']; ?></small>
+            </div>
 
-            <!-- Autoweergave -->
+            <!-- Hier komen alle auto's te staan!!!! -->
             <div class="car-grid">
+                <?php if(count($cars) == 0): ?>
+                    <div style="text-align: center; padding: 20px; background: #ffeeee; border: 1px solid #ffcccc;">
+                        <h3>😢 Geen auto's gevonden!</h3>
+                        <p>Probeer andere filters of zoekterm</p>
+                    </div>
+                <?php endif; ?>
+                
                 <?php foreach ($cars as $car): ?>
                 <div class="car-card">
+                    <!-- Auto informatie -->
                     <div class="car-header">
                         <div class="car-info">
-                            <h3><?= $car['brand'] ?></h3>
-                            <span class="car-type"><?= $car['type'] ?></span>
-                        </div>
-                        <div class="favorite-icon <?= $car['is_favorite'] ? 'active' : '' ?>" data-car-id="<?= $car['id'] ?>">
-                            <i class="fa fa-heart"></i>
+                            <h3><?= strtoupper($car['brand']) ?> <span style="color:#ff0000; font-size:10px;"><?= $car['type'] ?></span></h3>
+                            <!-- <span class="car-type"><?= $car['type'] ?></span> -->
                         </div>
                     </div>
-                    <div class="car-image">
+                    
+                    <!-- FOTO VAN AUTO -->
+                    <div class="car-image" style="border:1px dashed #ccc;">
                         <img src="assets/images/products/<?= $car['main_image'] ?>" alt="<?= $car['brand'] ?>">
                     </div>
+                    
+                    <!-- AUTO INFO -->
                     <div class="car-specs">
                         <div class="spec-item">
                             <img src="assets/images/icons/gas-station.svg" alt="Brandstof">
-                            <span><?= $car['gasoline'] ?></span>
+                            <span><?= $car['gasoline'] ?> BRANDSTOF</span>
                         </div>
                         <div class="spec-item">
                             <img src="assets/images/icons/car.svg" alt="Handmatig">
@@ -158,15 +200,23 @@ try {
                         </div>
                         <div class="spec-item">
                             <img src="assets/images/icons/profile-2user.svg" alt="Personen">
-                            <span><?= $car['capacity'] ?></span>
+                            <span><?= $car['capacity'] ?> personen</span>
                         </div>
                     </div>
+                    
+                    <!-- PRIJS EN HUUR KNOP -->
                     <div class="car-footer">
+                        <?php if(!empty($car['old_price']) && $car['old_price'] > $car['price']): ?>
+                            <del style="color:red; font-size:12px;">€<?= number_format((float)$car['old_price'], 2, ',', '.') ?></del><br>
+                        <?php endif; ?>
                         <div class="price">
                             <span class="amount">€<?= number_format((float)$car['price'], 2, ',', '.') ?></span>
                             <span class="period">/dag</span>
+                            <?php if($car['price'] < 50): ?>
+                                <span style="color:green; font-size:10px;">GOEDKOOP!</span>
+                            <?php endif; ?>
                         </div>
-                        <a href="/car-detail?id=<?= $car['id'] ?>" class="rent-now-btn">Huur Nu</a>
+                        <a href="/car-detail?id=<?= $car['id'] ?>" class="rent-now-btn" onclick="alert('Leuk dat je deze auto wilt huren!')">HUUR NU!!!</a>
                     </div>
                 </div>
                 <?php endforeach; ?>

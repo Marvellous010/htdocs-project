@@ -46,19 +46,8 @@
         </ul>
     </div>
 </div>
-<div id="loginModal" class="modal hidden">
-    <div class="modal-content">
-        <h2>Welkom bij Rydr</h2>
-        <p>Kies hoe je verder wilt gaan:</p>
-        <div class="modal-actions">
-            <a href="/login-form" class="button-secondary">Inloggen</a>
-            <a href="/register-form" class="button-primary">Account aanmaken</a>
-        </div>
-        <button class="modal-close">&times;</button>
-    </div>
-</div>
+<!-- Login modal removed - functionality handled directly in navigation -->
 <script src="/assets/javascript/main.js"></script>
-<script src="/assets/js/like-car.js"></script>
 
 </body>
 </html>

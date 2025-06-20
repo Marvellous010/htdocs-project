@@ -46,9 +46,7 @@
                             <h3><?= $car['brand'] ?></h3>
                             <span class="car-type"><?= $car['type'] ?></span>
                         </div>
-                        <div class="favorite-icon <?= $car['is_favorite'] ? 'active' : '' ?>" data-car-id="<?= $car['id'] ?>">
-                            <i class="fa fa-heart"></i>
-                        </div>
+                    
                     </div>
                     <div class="car-image">
                         <img src="assets/images/products/<?= $car['main_image'] ?>" alt="<?= $car['brand'] ?>">
