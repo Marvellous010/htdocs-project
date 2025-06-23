@@ -2,13 +2,13 @@
 session_start();
 require "includes/header.php";
 
-// Redirect to home if not logged in
+// Doorsturen naar home als niet ingelogd
 if (!isset($_SESSION['id'])) {
     header('Location: /');
     exit();
 }
 
-// Get current user info
+// Gebruikersgegevens ophalen
 require_once "database/connection.php";
 $stmt = $conn->prepare("SELECT * FROM account WHERE id = :id");
 $stmt->bindParam(":id", $_SESSION['id']);
@@ -16,7 +16,7 @@ $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
-<!-- Include account styling -->
+<!-- Account styling -->
 <link rel="stylesheet" href="/assets/css/account.css">
 
 <main>
@@ -47,7 +47,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
             </div>
             
-            <!-- Rechter kolom - Formulier -->
+            <!-- Formulier -->
             <div class="form-section">
                 <?php if (isset($_SESSION['account_message'])): ?>
                     <div class="notification <?= strpos($_SESSION['account_message'], 'gelukt') !== false ? 'succes-message' : 'message' ?>">
@@ -59,7 +59,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 <form action="/update-account" method="post" enctype="multipart/form-data">
                     <input type="file" id="profile_image" name="profile_image" style="display: none;" accept="image/*">
                     
-                    <!-- Persoonlijke gegevens sectie -->
+                    <!-- Persoonlijke gegevens -->
                     <div class="form-card">
                         <div class="section-header">
                             <div class="section-icon">
@@ -85,7 +85,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     
-                    <!-- Wachtwoord sectie -->
+                    <!-- Wachtwoord -->
                     <div class="form-card">
                         <div class="section-header">
                             <div class="section-icon">
@@ -138,7 +138,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     
-                    <!-- Submit knop -->
+                    <!-- Knop -->
                     <div class="submit-container">
                         <button type="submit" class="submit-button">
                             <div class="button-content">
@@ -157,7 +157,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 </main>
 
 <script>
-    // Preview profile image before upload
+    // Profielafbeelding voorbeeld
     document.getElementById('profile_image').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (file) {

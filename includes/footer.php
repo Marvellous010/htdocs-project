@@ -18,7 +18,7 @@
             <ul>
                 <li><a href="/events">Events</a></li>
                 <li><a href="#">Blog</a></li>
-                <li><a href="/podcast">Podcast</a></li>
+                <li><a href="#">Podcast</a></li>
                 <li><a href="#">Nodig een vriend uit</a></li>
             </ul>
         </div>

@@ -1,0 +1,305 @@
+/* Algemene pagina styling */
+.my-reservations-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 15px;
+    background-color: #f9f9f9;
+}
+
+/* Header styling */
+.my-reservations-header {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.my-reservations-header h1 {
+    color: #1A202C;
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.my-reservations-header p {
+    color: #4A5568;
+    margin: 0;
+}
+
+.my-reservations-header img {
+    max-width: 100px;
+    margin-top: 10px;
+}
+
+/* User info bar */
+.user-info-bar {
+    background-color: #EBF8FF;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    color: #2C5282;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Message styling */
+.message {
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.success-message {
+    background-color: #C6F6D5;
+    color: #2F855A;
+    border: 1px solid #2F855A;
+}
+
+.error-message {
+    background-color: #FED7D7;
+    color: #C53030;
+    border: 1px solid #C53030;
+}
+
+/* Reservations counter */
+.reservations-counter {
+    background: #f8f9fa;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    text-align: center;
+    color: #4A5568;
+    font-weight: 600;
+}
+
+/* Reservations grid */
+.reservations-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+/* Reservation card styling */
+.reservation-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: row;
+}
+
+.reservation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Car image section */
+.reservation-car-image {
+    flex: 0 0 40%;
+    padding: 15px;
+    position: relative;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reservation-car-image img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+/* Status label */
+.status-label {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.status-pending {
+    background-color: #FEFCBF;
+    color: #975A16;
+    border: 1px solid #975A16;
+}
+
+.status-confirmed {
+    background-color: #C6F6D5;
+    color: #2F855A;
+    border: 1px solid #2F855A;
+}
+
+.status-canceled {
+    background-color: #FED7D7;
+    color: #C53030;
+    border: 1px solid #C53030;
+}
+
+.status-completed {
+    background-color: #BEE3F8;
+    color: #2C5282;
+    border: 1px solid #2C5282;
+}
+
+/* Reservation details */
+.reservation-details {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Car name styling */
+.car-info {
+    background-color: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.reservation-car-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #3563E9;
+    margin: 0;
+}
+
+.reservation-car-name span {
+    color: #4A5568;
+    font-weight: 500;
+}
+
+/* Dates section */
+.reservation-dates {
+    background-color: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.reservation-date {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.reservation-date:last-child {
+    margin-bottom: 0;
+}
+
+.reservation-date-label {
+    font-weight: 500;
+    color: #4A5568;
+}
+
+.reservation-date-value {
+    color: #1A202C;
+}
+
+/* Price section */
+.reservation-price {
+    margin-top: auto;
+    text-align: right;
+}
+
+.reservation-price-label {
+    display: block;
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.reservation-price-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3563E9;
+}
+
+.luxury-tag {
+    display: inline-block;
+    background-color: #FEFCBF;
+    color: #975A16;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-top: 5px;
+}
+
+/* No reservations message */
+.no-reservations {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.no-reservations h2 {
+    color: #1A202C;
+    margin-bottom: 15px;
+}
+
+.no-reservations p {
+    color: #4A5568;
+    margin-bottom: 20px;
+}
+
+.button-primary {
+    background-color: #3563E9;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s;
+}
+
+.button-primary:hover {
+    background-color: #2954d4;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .reservation-card {
+        flex-direction: column;
+    }
+    
+    .reservation-car-image {
+        flex: none;
+        width: 100%;
+    }
+    
+    .reservation-details {
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    .my-reservations-header h1 {
+        font-size: 20px;
+    }
+    
+    .reservation-date {
+        flex-direction: column;
+        margin-bottom: 12px;
+    }
+    
+    .reservation-price-value {
+        font-size: 18px;
+    }
+}
