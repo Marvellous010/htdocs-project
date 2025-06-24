@@ -25,11 +25,11 @@
         </div>
         <div class="car-grid">
             <?php 
-            // Include database connection
+            // Hier connect ik met de database
             require_once __DIR__ . "/../database/connection.php";
             
             try {
-                // Fetch popular cars from database (limit to 4 for the homepage)
+                // Haal de 4 populairste auto's op voor de homepage
                 $stmt = $conn->query("SELECT * FROM cars LIMIT 4");
                 $popularCars = $stmt->fetchAll(PDO::FETCH_ASSOC);
             } catch (PDOException $e) {
@@ -37,7 +37,7 @@
                 $popularCars = [];
             }
             
-            // Display cars
+            // Nu laat ik de auto's zien
             foreach ($popularCars as $i => $car) :
             ?>
                 <div class="car-card">

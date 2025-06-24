@@ -24,10 +24,6 @@ if ($path === 'register-handler') {
     exit;
 }
 
-if ($path === 'add-review') {
-    require_once __DIR__ . '/actions/add-review.php';
-    exit;
-}
 
 
 if ($path === 'account') {

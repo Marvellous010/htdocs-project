@@ -1,33 +1,33 @@
 <?php require "includes/header.php" ?>
 
 <?php
-// Include database connection
+// Hier connect ik met de database
 require_once __DIR__ . "/../database/connection.php";
 
-// Get car ID from URL parameter
+// Pak de auto ID uit de URL
 $carId = isset($_GET['id']) ? intval($_GET['id']) : 1;
 
 try {
-    // Fetch car data from database
+    // Haal alle info over de auto uit de database
     $stmt = $conn->prepare("SELECT * FROM cars WHERE id = :id");
     $stmt->bindParam(':id', $carId);
     $stmt->execute();
     
-    // Check if car exists
+    // Check of de auto bestaat
     if ($stmt->rowCount() === 0) {
-        // If car not found, get the first car
+        // Als de auto niet bestaat, pak gewoon de eerste auto
         $stmt = $conn->query("SELECT * FROM cars ORDER BY id LIMIT 1");
     }
     
     $car = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    // If no cars in database, show error message
+    // Als er geen auto's zijn, laat een error zien
     if (!$car) {
         echo "<div class='message'>No cars found in database. Please <a href='/setup_database.php'>setup the database</a> first.</div>";
         exit;
     }
     
-    // Fetch reviews for this car
+    // Haal alle reviews voor deze auto op
     $stmt = $conn->prepare("SELECT * FROM reviews WHERE car_id = :car_id ORDER BY date DESC");
     $stmt->bindParam(':car_id', $car['id']);
     $stmt->execute();
@@ -38,14 +38,14 @@ try {
     exit;
 }
 
-// No sample reviews - keep the array empty
+// Geen reviews? Maak een lege lijst
 if (empty($carReviews)) {
     $carReviews = [];
 }
 ?>
 
 <?php
-// Display success or error messages if they exist
+// Laat een bericht zien als het gelukt is of niet
 if (isset($_GET['success']) && $_GET['success'] == 1) {
     echo '<div class="succes-message">Uw beoordeling is succesvol ingediend!</div>';
 }
@@ -245,14 +245,14 @@ if (isset($_GET['error'])) {
 
 <?php if (isset($_SESSION['reservation_error'])): ?>
 <script>
-    // Show reservation error
+    // Laat een foutmelding zien als er iets mis is gegaan
     alert('<?= $_SESSION['reservation_error'] ?>');
 </script>
 <?php unset($_SESSION['reservation_error']); ?>
 <?php endif; ?>
 
 <script>
-    // Calculate total cost for reservation
+    // Bereken hoeveel je moet betalen
     document.addEventListener('DOMContentLoaded', function() {
         const pickupDateInput = document.getElementById('pickup_date');
         const returnDateInput = document.getElementById('return_date');
@@ -281,7 +281,7 @@ if (isset($_GET['error'])) {
         pickupDateInput?.addEventListener('change', calculateTotal);
         returnDateInput?.addEventListener('change', calculateTotal);
         
-        // Set min date for return date to be at least one day after pickup date
+        // Zorg dat je de auto minstens 1 dag huurt
         pickupDateInput?.addEventListener('change', function() {
             if (pickupDateInput.value) {
                 const nextDay = new Date(pickupDateInput.value);
@@ -293,7 +293,7 @@ if (isset($_GET['error'])) {
                 
                 returnDateInput.min = `${year}-${month}-${day}`;
                 
-                // If current return date is before new min date, update it
+                // Als je een te korte periode hebt gekozen, fix ik dat
                 if (returnDateInput.value && new Date(returnDateInput.value) < nextDay) {
                     returnDateInput.value = `${year}-${month}-${day}`;
                     calculateTotal();

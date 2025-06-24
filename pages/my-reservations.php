@@ -2,13 +2,13 @@
 session_start();
 require "includes/header.php";
 
-// Redirect to home if not logged in
+// Als je niet bent ingelogd, stuur ik je terug naar home
 if (!isset($_SESSION['id'])) {
     header('Location: /');
     exit();
 }
 
-// Get user's reservations
+// Hier haal ik al je gereserveerde auto's op
 require_once "database/connection.php";
 
 try {
@@ -27,12 +27,11 @@ try {
 }
 ?>
 
-<!-- Deze pagina is gemaakt door: Kevin - MBO 4 Software Development 2025 -->
-<!-- NIET AANPASSEN AUB! -->
+
 
 <main>
     <div class="my-reservations-container">
-        <!-- Dit is de koptekst van de pagina -->
+        <!-- Titel en uitleg bovenaan de pagina -->
         <div class="my-reservations-header">
             <h1>MIJN AUTO RESERVERINGEN</h1>
             <p>Bekijk en beheer uw autoreserveringen bij <span class="brand-name">RYDR</span> - De beste autoverhuur van Nederland!</p>
@@ -61,7 +60,7 @@ try {
             <div class="message error-message"><?= $error ?></div>
         <?php else: ?>
             <?php if (count($reservations) > 0): ?>
-                <!-- Reserveringen teller -->
+                <!-- Teller voor aantal reserveringen -->
                 <div class="reservations-counter">
                     <p>U heeft <?= count($reservations) ?> reservering(en)!</p>
                 </div>
@@ -71,7 +70,7 @@ try {
                         <div class="reservation-card">
                             <div class="reservation-car-image">
                                 <?php
-                                // Hier bepalen we de status van de reservering
+                                // Hier kies ik de juiste tekst en kleur voor de status
                                 $status_class = '';
                                 switch ($reservation['status']) {
                                     case 'pending':
@@ -92,18 +91,18 @@ try {
                                         break;
                                 }
                                 ?>
-                                <!-- Dit is de status label -->
+                                <!-- Label dat de status laat zien -->
                                 <div class="status-label <?= $status_class ?>"><?= $status_text ?></div>
-                                <!-- Dit is de afbeelding van de auto -->
+                                <!-- Foto van de auto -->
                                 <img src="assets/images/products/<?= $reservation['main_image'] ?>" alt="<?= $reservation['brand'] ?> <?= $reservation['type'] ?>">
                             </div>
                             <div class="reservation-details">
-                                <!-- Auto naam en type -->
+                                <!-- Merk en type auto -->
                                 <div class="car-info">
                                     <div class="reservation-car-name"><?= strtoupper($reservation['brand']) ?> <span><?= $reservation['type'] ?></span></div>
                                 </div>
                                 
-                                <!-- Datums voor ophalen en terugbrengen -->
+                                <!-- Wanneer ophalen en terugbrengen -->
                                 <div class="reservation-dates">
                                     <div class="reservation-date">
                                         <span class="reservation-date-label">📅 Ophalen:</span>
@@ -115,7 +114,7 @@ try {
                                     </div>
                                 </div>
                                 
-                                <!-- Prijsinformatie -->
+                                <!-- Hoeveel het kost -->
                                 <div class="reservation-price">
                                     <span class="reservation-price-label">Totale Prijs:</span>
                                     <span class="reservation-price-value">€<?= number_format($reservation['total_price'], 2, ',', '.') ?></span>
